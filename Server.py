@@ -61,7 +61,7 @@ def search(comando):
     latitude = coordinates(comando)
     longitude = coordinates(comando,"Longitude")
 
-    with open("precos.in") as arquivo:
+    with open("votacoes.in") as arquivo:
         
         for line in arquivo: 
             lMsg = line.split( )
@@ -75,11 +75,11 @@ def search(comando):
         return preco
 
 def verifyExistsFile():
-    return os.path.exists('precos.in')
+    return os.path.exists('votacoes.in')
 
 def writeFile(comando):
     try:
-        arq = open("precos.in", "a")
+        arq = open("votacoes.in", "a")
         if(comando[1] == '558200'):
             arq.write(comando[1] + " - Marco Antonio da Silva Barbosa")
         elif(comando[1] == '558201'):
@@ -98,7 +98,7 @@ def writeFile(comando):
 
 def printFile():
     try:
-        arq =  open("precos.in", "r")
+        arq =  open("votacoes.in", "r")
         print('########################')
         print('# TABELA DE CANDIDATOS #')
         print('########################')
