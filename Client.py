@@ -56,7 +56,7 @@ def comandos():
     print('\n#####################################')
     print( '#              COMANDOS             #' )
     print( '#####################################' )
-    print( '# cadidatos : opcoes de voto        #' )
+    print( '# candidatos : opcoes de voto       #' )
     print( '# V (numero): votar candidato       #' )
     print( '# B : votar branco                  #' )
     print( '# N : votar nulo                    #' )
@@ -64,33 +64,45 @@ def comandos():
     print( '# fechar : Encerrar conexão         #' )
     print('#####################################\n')
 
-def tryInputClientTypeFuel(mensagem):
+
+
+"""def tryInputClientTypeFuel(mensagem):
     if mensagem[0] == 'V' or mensagem[0] == 'B' or mensagem[0] == 'N' :
         return True
     
     return False
+"""
+def printFile():
+    try:
+        arq =  open("candidatos.in", "r")
+        print('\n################################################################')
+        print('#                      TABELA DE CANDIDATOS                    #')
+        print('################################################################\n')
+
+        for line in arq:
+            print(line)
+        print('################################################################\n')
+    except IOError:
+        print('Arquivo não encontrado!')
 
 def tryInputClientCommand(mensagem):
-    
-    if mensagem[0] == 'V' or mensagem[0] == 'B' or mensagem[0] == 'N' or mensagem[0] == 'cadidatos' or mensagem[0] == 'print' :
+    if mensagem[0] == 'V' or mensagem[0] == 'B' or mensagem[0] == 'N' or mensagem[0] == 'candidatos' :
         return True
     return False
     
 def tratamentosClient(dadosMensagem):
     tamanhoDaMensagem = len(dadosMensagem)
+    print("\nMensagem : ", dadosMensagem)
+    print("Tamanho da mensagem : ", tamanhoDaMensagem)
+    print("================================================\n")
     if tryInputClientCommand(dadosMensagem) == False:
         print("\nPor favor, verifique se o comando digitado esta correto\n")
         return True
-    # elif tryInputClientTypeFuel(dadosMensagem) == False and dadosMensagem[1] != 'all':
-    #     print("\nEsse valor para combustivel não é valido!\n")
-    #     print("0 para Disel\n1 para álcool\n2 para gasolina\n")
-    #     return True
-    elif tamanhoDaMensagem != 2:
-        if dadosMensagem[1] == 'all': return False
-        elif tamanhoDaMensagem < 2: print('\nAtenção\nEsta faltando dados de entrada\n')
-        else: print('\nAtenção\nVocê inseriu dados a mais\n')
-        return True
-    return False
+    elif tryInputClientCommand(dadosMensagem): return False
+    elif tamanhoDaMensagem < 1: print('\nAtenção\nEsta faltando dados de entrada\n')
+    elif tamanhoDaMensagem > 2: print('\nAtenção\nVocê inseriu dados a mais\n')
+    
+    return True
 
 def main():
     # iniciando tabela com comandos
@@ -112,22 +124,41 @@ def main():
             
             dadosMensagem = mensagem.split( )
 
+            print("1 - dadosMensagem : ", dadosMensagem)
+            print("2 - tamanho do dadosMEnsagem : ", len(dadosMensagem))
+
             # Faz tratamento pelo client verificando condicoes de entrada
             if tratamentosClient(dadosMensagem):
+                print("Entrei no if do primeiro tratamento")
                 mensagem = ""
                 continue
-
-            idMensagem = dadosMensagem[1]
-
-            udp.sendto(str.encode(mensagem), dest)
-            data = udp.recv(1024)
-
-            if data.decode()!= 'all':
-                # mensagem recebida do servidor
-                print("Recebido: {}".format(data.decode()))
+            elif dadosMensagem[0] == 'candidatos':
+                printFile()
+                mensagem = ""
+                continue
             
-            # reenviar mensagem
-            if data.decode()!= idMensagem: udp.sendto(str.encode(mensagem), dest)          
+            idMensagem = dadosMensagem[0]
+
+            #print("dadosMensagem ====> ", dadosMensagem)
+            #print("idMensagem ====> ", idMensagem)
+            
+            
+            if idMensagem == 'V' or idMensagem == 'B' or idMensagem == 'N':
+
+                udp.sendto(str.encode(mensagem), dest)
+                data = udp.recv(1024)
+
+                print("data => ", data)
+
+                if data.decode()!= 'candidatos':
+                    # mensagem recebida do servidor
+                    print("Recebido: {}".format(data.decode()))
+                
+                # reenviar mensagem
+                if data.decode()!= idMensagem: udp.sendto(str.encode(mensagem), dest)
+
+                print("\nVotação Encerrada. Obrigado pelo seu voto! \n")
+                break
         
         mensagem = input("Digite seu comando: ") 
 

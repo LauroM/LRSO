@@ -47,7 +47,7 @@ orig = (HOST, int(PORT))
 udp.bind(orig)
 
 
-def coordinates(comando,coord = "Latitude"):
+"""def coordinates(comando,coord = "Latitude"):
     
     if coord == "Latitude":
         return (int(comando[4]) - int(comando[3]), int(comando[4]) + int(comando[3]))
@@ -73,6 +73,7 @@ def search(comando):
     
     if preco != 999999:
         return preco
+"""
 
 def verifyExistsFile():
     return os.path.exists('votacoes.in')
@@ -88,6 +89,10 @@ def writeFile(comando):
             arq.write(comando[1] + " - Carlos Alberto Marques Pietrobon")
         elif(comando[1] == '558203'):
             arq.write(comando[1] + " - Maria Lourdes Granha Nogueira")
+        elif(comando[1] == '558204'):
+            arq.write(comando[1] + " - Max Do Val Machado")
+        elif(comando[1] == '558205'):
+            arq.write(comando[1] + " - Felipe Domingos da Cunha")
         else:   
             print('Nenhum candidato com esse id foi encontrado.\n')
         arq.write("\n")
@@ -99,29 +104,34 @@ def writeFile(comando):
 def printFile():
     try:
         arq =  open("votacoes.in", "r")
-        print('########################')
-        print('# TABELA DE CANDIDATOS #')
-        print('########################')
+        print('################################################################')
+        print('#                        ORDEM DE VOTOS                        #')
+        print('################################################################\n')
+        c558200 = 0
+        c558201 = 0
+        c558202 = 0
+        c558203 = 0
+        c558204 = 0
+        c558205 = 0
         for line in arq:
             candidato = line.split(" - ")
-            c558200 = 0
-            c558201 = 0
-            c558202 = 0
-            c558203 = 0
-            print(candidato[0])
-            if(candidato[0] == '558200'):
-                c558200 = c558200 + 1
-            elif(candidato[0] == '558201'):
-                c558201 = c558201 + 1
-            elif(candidato[0] == '558202'):
-                c558202 = c558202 + 1
-            elif(candidato[0] == '558203'):
-                c558203 = c558203 + 1
+            print(line)
+            if(candidato[0] == '558200'): c558200 += 1
+            elif(candidato[0] == '558201'): c558201 += 1
+            elif(candidato[0] == '558202'): c558202 += 1
+            elif(candidato[0] == '558203'): c558203 += 1
+            elif(candidato[0] == '558204'): c558204 += 1
+            elif(candidato[0] == '558205'): c558205 += 1
+        print('\n###############################################################')
+        print('#                      Parcial dos votos                      #')
+        print('###############################################################')
         print("Marco Antonio da Silva Barbosa - " + str(c558200) + " votos.")
         print("Raquel Aparecida de Freitas Mini - " + str(c558201) + " votos.")
         print("Carlos Alberto Marques Pietrobon - " + str(c558202) + " votos.")
         print("Maria Lourdes Granha Nogueira - " + str(c558203) + " votos.")
-        print('########################')
+        print("Max Do Val Machado - " + str(c558204) + " votos.")
+        print("Felipe Domingos da Cunha - " + str(c558205) + " votos.")
+        print('###############################################################')
     except IOError:
         print('Arquivo não encontrado!')
 
@@ -133,7 +143,7 @@ def loadingdServer():
         sys.stdout.flush()
         sleep(0.25)
     
-    print("\nServidor Conectado\n")
+    print("\n\nServidor Conectado\n")
 
 
 def main():
@@ -148,17 +158,22 @@ def main():
         
         comando = msg.decode().split( )
 
+        print("comando ==> ", comando)
+
         comandoPrincipal = comando[0]
-        response = comando[1]
+        response = comando[0]
+
+        print("comando principal: ", comandoPrincipal)
+        print("response : ", response)
 
         if comandoPrincipal == 'B' or comandoPrincipal == 'N':
             print('Votação concluída com sucesso!\n')
 
         if comandoPrincipal == 'V':
             writeFile(comando)
-
-        if comandoPrincipal == 'print':
             printFile()
+
+        #if comandoPrincipal == 'candidatos':
                 
         # Se for print all, falar que recebeu print all e mandar usuario olhar no outro console
         udp.sendto(str.encode(response), cliente)    
