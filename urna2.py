@@ -64,7 +64,6 @@ class App(QMainWindow):
         self.textbox1 = QLineEdit(self)
         self.textbox1.move(80, 100)
         self.textbox1.resize(260,30)
-
         
         # Create a button in the window
         self.button = QPushButton('Branco', self)
@@ -114,6 +113,12 @@ class App(QMainWindow):
         # connect button to function on_click
         self.button.clicked.connect(self.on_click)
         self.show()
+        # connect button to function on_click
+        self.button1.clicked.connect(self.on_click_confirm)
+        self.show()
+        # connect button to function on_click
+        self.button2.clicked.connect(self.on_click_nulo)
+        self.show()
 
 
     
@@ -121,8 +126,8 @@ class App(QMainWindow):
     def on_click(self):
         HOST = str(self.textbox.text())
         PORT = self.textbox2.text()
-        QMessageBox.question(self, 'Votação Encerrada', "Obrigado por votar! " + HOST, QMessageBox.Ok, QMessageBox.Ok)
-        self.textbox.setText("")
+        QMessageBox.question(self, 'Votação Encerrada', "Obrigado por votar! ", QMessageBox.Ok, QMessageBox.Ok)
+        #self.textbox.setText("")
         
         dest = (HOST, int(PORT))
         
@@ -135,16 +140,54 @@ class App(QMainWindow):
         if data.decode()!= 'candidatos':
             # mensagem recebida do servidor
             print("Recebido: {}".format(data.decode()))
-        
         # reenviar mensagem
         if data.decode()!= idMensagem: udp.sendto(str.encode(mensagem), dest)
 
         udp.close()
 
+    @pyqtSlot()
+    def on_click_nulo(self):
+        HOST = str(self.textbox.text())
+        PORT = self.textbox2.text()
+        QMessageBox.question(self, 'Votação Encerrada', "Obrigado por votar! ", QMessageBox.Ok, QMessageBox.Ok)
+        
+        dest = (HOST, int(PORT))
+        
+        idMensagem = 'N'
+        mensagem = 'N'
 
+        udp.sendto(str.encode(mensagem), dest)
+        data = udp.recv(1024)
 
+        if data.decode()!= 'candidatos':
+            # mensagem recebida do servidor
+            print("Recebido: {}".format(data.decode()))
+        # reenviar mensagem
+        if data.decode()!= idMensagem: udp.sendto(str.encode(mensagem), dest)
 
+        udp.close()
 
+    @pyqtSlot()
+    def on_click_confirm(self):
+        HOST = str(self.textbox.text())
+        PORT = self.textbox2.text()
+        QMessageBox.question(self, 'Votação Encerrada', "Obrigado por votar! ", QMessageBox.Ok, QMessageBox.Ok)
+        
+        dest = (HOST, int(PORT))
+        
+        idMensagem = 'V'
+        mensagem = 'V ' + self.textbox1.text()
+
+        udp.sendto(str.encode(mensagem), dest)
+        data = udp.recv(1024)
+
+        if data.decode()!= 'candidatos':
+            # mensagem recebida do servidor
+            print("Recebido: {}".format(data.decode()))
+        # reenviar mensagem
+        if data.decode()!= idMensagem: udp.sendto(str.encode(mensagem), dest)
+
+        udp.close()
 
 
 
