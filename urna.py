@@ -1,10 +1,26 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'urna.ui'
-#
-# Created by: PyQt5 UI code generator 5.10.1
-#
-# WARNING! All changes made in this file will be lost!
+######################################################################################################
+# File name: server.py                                                                               #
+######################################################################################################
+# author: Lauro Milagres Oliveira                                                                    #
+# author: Lucas Dutra Donoso Ponce de Leon                                                           #
+######################################################################################################
+# Trabalho pratico - Questao 2 (Sistema de votacao para melhor professor)                            #
+#                                                                                                    #
+# Objetivo:                                                                                          #
+# O servidor deve confirmar a recepcao de mensagens.                                                 #
+# O servidor deve adicionar a informacao em um arquivo. (votacoes.in)                                #
+# O servidor deve retornar o resultado das votacoes (quantidade de votos por professor  )            #
+# O servidor deve imprimir na tela o conteudo das mensagens que eles receberem.                      #
+#                                                                                                    #
+######################################################################################################
+
+import socket
+import os.path
+
+from time import sleep
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication
@@ -16,9 +32,6 @@ class Dialog(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(Dialog, self).__init__(parent)
         self.setupUi(self)
-    
-    
-    
     
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
