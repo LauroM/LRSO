@@ -126,7 +126,6 @@ class App(QMainWindow):
     def on_click(self):
         HOST = str(self.textbox.text())
         PORT = self.textbox2.text()
-        QMessageBox.question(self, 'Votação Encerrada', "Obrigado por votar! ", QMessageBox.Ok, QMessageBox.Ok)
         #self.textbox.setText("")
         
         dest = (HOST, int(PORT))
@@ -144,12 +143,12 @@ class App(QMainWindow):
         if data.decode()!= idMensagem: udp.sendto(str.encode(mensagem), dest)
 
         udp.close()
+        QMessageBox.question(self, 'Votação Encerrada', "Obrigado por votar! ", QMessageBox.Ok, QMessageBox.Ok)
 
     @pyqtSlot()
     def on_click_nulo(self):
         HOST = str(self.textbox.text())
         PORT = self.textbox2.text()
-        QMessageBox.question(self, 'Votação Encerrada', "Obrigado por votar! ", QMessageBox.Ok, QMessageBox.Ok)
         
         dest = (HOST, int(PORT))
         
@@ -166,12 +165,12 @@ class App(QMainWindow):
         if data.decode()!= idMensagem: udp.sendto(str.encode(mensagem), dest)
 
         udp.close()
+        QMessageBox.question(self, 'Votação Encerrada', "Obrigado por votar! ", QMessageBox.Ok, QMessageBox.Ok)
 
     @pyqtSlot()
     def on_click_confirm(self):
         HOST = str(self.textbox.text())
         PORT = self.textbox2.text()
-        QMessageBox.question(self, 'Votação Encerrada', "Obrigado por votar! ", QMessageBox.Ok, QMessageBox.Ok)
         
         dest = (HOST, int(PORT))
         
@@ -188,6 +187,7 @@ class App(QMainWindow):
         if data.decode()!= idMensagem: udp.sendto(str.encode(mensagem), dest)
 
         udp.close()
+        QMessageBox.question(self, 'Votação Encerrada', "Obrigado por votar! ", QMessageBox.Ok, QMessageBox.Ok)
 
 
 
