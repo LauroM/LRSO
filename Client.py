@@ -62,16 +62,8 @@ def comandos():
     print( '# N : votar nulo                    #' )
     print( '# ajuda : Mostrar uso dos comandos  #' )
     print( '# fechar : Encerrar conexão         #' )
-    print('#####################################\n')
+    print( '#####################################\n')
 
-
-
-"""def tryInputClientTypeFuel(mensagem):
-    if mensagem[0] == 'V' or mensagem[0] == 'B' or mensagem[0] == 'N' :
-        return True
-    
-    return False
-"""
 def printFile():
     try:
         arq =  open("candidatos.in", "r")
@@ -92,9 +84,6 @@ def tryInputClientCommand(mensagem):
     
 def tratamentosClient(dadosMensagem):
     tamanhoDaMensagem = len(dadosMensagem)
-    print("\nMensagem : ", dadosMensagem)
-    print("Tamanho da mensagem : ", tamanhoDaMensagem)
-    print("================================================\n")
     if tryInputClientCommand(dadosMensagem) == False:
         print("\nPor favor, verifique se o comando digitado esta correto\n")
         return True
@@ -124,8 +113,8 @@ def main():
             
             dadosMensagem = mensagem.split( )
 
-            print("1 - dadosMensagem : ", dadosMensagem)
-            print("2 - tamanho do dadosMEnsagem : ", len(dadosMensagem))
+            #print("1 - dadosMensagem : ", dadosMensagem)
+            #print("2 - tamanho do dadosMEnsagem : ", len(dadosMensagem))
 
             # Faz tratamento pelo client verificando condicoes de entrada
             if tratamentosClient(dadosMensagem):
@@ -148,7 +137,7 @@ def main():
                 udp.sendto(str.encode(mensagem), dest)
                 data = udp.recv(1024)
 
-                print("data => ", data)
+                #print("data => ", data)
 
                 if data.decode()!= 'candidatos':
                     # mensagem recebida do servidor

@@ -47,54 +47,34 @@ orig = (HOST, int(PORT))
 udp.bind(orig)
 
 
-"""def coordinates(comando,coord = "Latitude"):
-    
-    if coord == "Latitude":
-        return (int(comando[4]) - int(comando[3]), int(comando[4]) + int(comando[3]))
-    elif coord == "Longitude":
-        return (int(comando[5]) - int(comando[3]), int(comando[5]) + int(comando[3]))
-
-def search(comando):
-    
-    preco = 999999
-    
-    latitude = coordinates(comando)
-    longitude = coordinates(comando,"Longitude")
-
-    with open("votacoes.in") as arquivo:
-        
-        for line in arquivo: 
-            lMsg = line.split( )
-
-            if (int(lMsg[2]) >= latitude[0] and int(lMsg[2]) <= latitude[1] and
-                int(lMsg[3]) >= longitude[0] and int(lMsg[3]) <= longitude[1] and lMsg[0] == comando[2]):
-                if int(lMsg[1]) < preco:
-                    preco = int(lMsg[1])
-    
-    if preco != 999999:
-        return preco
-"""
-
 def verifyExistsFile():
     return os.path.exists('votacoes.in')
 
 def writeFile(comando):
     try:
         arq = open("votacoes.in", "a")
-        if(comando[1] == '558200'):
-            arq.write(comando[1] + " - Marco Antonio da Silva Barbosa")
-        elif(comando[1] == '558201'):
-            arq.write(comando[1] + " - Raquel Aparecida de Freitas Mini")
-        elif(comando[1] == '558202'):
-            arq.write(comando[1] + " - Carlos Alberto Marques Pietrobon")
-        elif(comando[1] == '558203'):
-            arq.write(comando[1] + " - Maria Lourdes Granha Nogueira")
-        elif(comando[1] == '558204'):
-            arq.write(comando[1] + " - Max Do Val Machado")
-        elif(comando[1] == '558205'):
-            arq.write(comando[1] + " - Felipe Domingos da Cunha")
-        else:   
-            print('Nenhum candidato com esse id foi encontrado.\n')
+        
+        if len(comando) > 1:
+        
+            if(comando[1] == '558200'):
+                arq.write(comando[1] + " - Marco Antonio da Silva Barbosa")
+            elif(comando[1] == '558201'):
+                arq.write(comando[1] + " - Raquel Aparecida de Freitas Mini")
+            elif(comando[1] == '558202'):
+                arq.write(comando[1] + " - Carlos Alberto Marques Pietrobon")
+            elif(comando[1] == '558203'):
+                arq.write(comando[1] + " - Maria Lourdes Granha Nogueira")
+            elif(comando[1] == '558204'):
+                arq.write(comando[1] + " - Max Do Val Machado")
+            elif(comando[1] == '558205'):
+                arq.write(comando[1] + " - Felipe Domingos da Cunha")
+            else:   
+                print('Nenhum candidato com esse id foi encontrado.\n')
+        else:
+            if(comando[0] == 'B'):
+                arq.write(comando[0] + " - Voto Branco")
+            elif(comando[0] == 'N'):
+                arq.write(comando[0] + " - Voto Nulo")
         arq.write("\n")
         arq.close()
         print('Votação concluída com sucesso!\n')
@@ -113,6 +93,8 @@ def printFile():
         c558203 = 0
         c558204 = 0
         c558205 = 0
+        cbranco = 0
+        cnulo = 0
         for line in arq:
             candidato = line.split(" - ")
             print(line)
@@ -122,6 +104,8 @@ def printFile():
             elif(candidato[0] == '558203'): c558203 += 1
             elif(candidato[0] == '558204'): c558204 += 1
             elif(candidato[0] == '558205'): c558205 += 1
+            elif(candidato[0] == 'B'): cbranco += 1
+            elif(candidato[0] == 'N'): cnulo += 1
         print('\n###############################################################')
         print('#                      Parcial dos votos                      #')
         print('###############################################################')
@@ -131,6 +115,9 @@ def printFile():
         print("Maria Lourdes Granha Nogueira - " + str(c558203) + " votos.")
         print("Max Do Val Machado - " + str(c558204) + " votos.")
         print("Felipe Domingos da Cunha - " + str(c558205) + " votos.")
+        print('###############################################################')
+        print("Branco - " + str(cbranco) + " votos.")
+        print("Nulo - " + str(cnulo) + " votos.")
         print('###############################################################')
     except IOError:
         print('Arquivo não encontrado!')
@@ -158,24 +145,13 @@ def main():
         
         comando = msg.decode().split( )
 
-        print("comando ==> ", comando)
-
         comandoPrincipal = comando[0]
         response = comando[0]
 
-        print("comando principal: ", comandoPrincipal)
-        print("response : ", response)
-
-        if comandoPrincipal == 'B' or comandoPrincipal == 'N':
-            print('Votação concluída com sucesso!\n')
-
-        if comandoPrincipal == 'V':
+        if comandoPrincipal == 'V' or comandoPrincipal == 'B' or comandoPrincipal == 'N':
             writeFile(comando)
             printFile()
 
-        #if comandoPrincipal == 'candidatos':
-                
-        # Se for print all, falar que recebeu print all e mandar usuario olhar no outro console
         udp.sendto(str.encode(response), cliente)    
 
     udp.close()
