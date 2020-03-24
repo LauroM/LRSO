@@ -22,7 +22,7 @@ import sys
 import socket
 import threading
 
-class ThreadedServer(object):
+class Server(object):
 	#Construtores 
     def __init__(self, host, port):
         self.host = host
@@ -133,14 +133,18 @@ class ThreadedServer(object):
         size = 1024
         while True:
             try:
-                data = client.recv(size) #Mensagem recebida do Cliente
+                #Mensagem recebida do lado do Cliente
+                data = client.recv(size)
                 
+                # primeira verificacao de dado
                 if data:
                 
                     comando = data.decode().split( )
                     comandoPrincipal = comando[0]
                     response = comando[0]
-
+                    # caso a mensagem recebida do client possua esses tres comandos principais
+                    # se possuir, abre o metodo writeFile para escrita no arquivo e gerar nosso log
+                    # depois mostra o log junto com as parciais dos votos
                     if comandoPrincipal == 'V' or comandoPrincipal == 'B' or comandoPrincipal == 'N':
                         self.writeFile(comando)
                         self.printFile()
@@ -150,12 +154,11 @@ class ThreadedServer(object):
 
 if __name__ == "__main__":
     
-    port_num = input("Insira a porta: ")
+    inputPort = input("Insira a porta: ")
     while True:
         try:
-            port_num = int(port_num)
+            inputPort = int(inputPort)
             break
         except ValueError:
             pass
-    #print("PORTA =======> ", port_num)
-    ThreadedServer('',port_num).listen()
+    Server('',inputPort).listen()
